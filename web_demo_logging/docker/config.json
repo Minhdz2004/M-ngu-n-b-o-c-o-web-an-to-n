@@ -1,0 +1,4 @@
+{
+  "HttpClientTimeout": 300,
+  "MaxConcurrentDownloads": 2
+}

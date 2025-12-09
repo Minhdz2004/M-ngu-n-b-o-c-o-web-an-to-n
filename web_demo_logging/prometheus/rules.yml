@@ -1,0 +1,20 @@
+groups:
+- name: webapp_alerts
+  rules:
+  - alert: HighLoginFailures
+    expr: increase(login_failed_total[1m]) > 5
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Số lần đăng nhập thất bại cao"
+      description: "login_failed_total tăng > 5 trong 1 phút"
+
+  - alert: High5xxRate
+    expr: increase(http_5xx_total[1m]) > 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Số lỗi HTTP 5xx tăng"
+      description: "http_5xx_total tăng trong 1 phút"

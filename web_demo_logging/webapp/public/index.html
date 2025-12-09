@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Logging & Monitoring</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 900px;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section h2 {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background-color: #f9f9f9;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #login-form button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    #login-form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    #login-form button:active {
+      transform: translateY(0);
+    }
+
+    #get-data {
+      background: #667eea;
+      color: white;
+    }
+
+    #get-data:hover {
+      background: #764ba2;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .result-box {
+      background-color: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 15px;
+      margin-top: 15px;
+      min-height: 60px;
+      font-size: 13px;
+      color: #333;
+      word-break: break-all;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .result-box.success {
+      background-color: #f0f9ff;
+      border-color: #4ade80;
+      color: #166534;
+    }
+
+    .result-box.error {
+      background-color: #fef2f2;
+      border-color: #ef4444;
+      color: #991b1b;
+    }
+
+    .health-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+
+    .health-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: pulse 2s infinite;
+    }
+
+    .health-indicator.online {
+      background: #4ade80;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .mode-selector {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    .mode-selector label {
+      margin-bottom: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-top: 1px solid #e0e0e0;
+      font-size: 12px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🔐 Demo Security Logging & Monitoring</h1>
+      <p>Hệ thống quản lý logs và giám sát an ninh</p>
+    </div>
+
+    <div class="content">
+      <!-- LOGIN SECTION -->
+      <div class="section">
+        <h2>📝 Đăng Nhập</h2>
+        
+        <div class="mode-selector">
+          <label for="mode">🎯 Chọn mode logging:</label>
+          <select id="mode">
+            <option value="basic">Basic - Logging đơn giản</option>
+            <option value="structured">Structured - Logging chi tiết</option>
+          </select>
+        </div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">👤 Tên đăng nhập</label>
+            <input type="text" id="username" placeholder="Nhập tên đăng nhập" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="password">🔑 Mật khẩu</label>
+            <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+          </div>
+          
+          <button type="submit">Đăng Nhập</button>
+        </form>
+        
+        <div id="login-result" class="result-box" style="display: none;"></div>
+      </div>
+
+      <!-- DATA & HEALTH SECTION -->
+      <div class="section">
+        <h2>📊 Dữ Liệu & Trạng Thái</h2>
+        
+        <div class="form-group">
+          <button id="get-data">📥 Lấy dữ liệu (GET /api/data)</button>
+        </div>
+        
+        <div id="data-result" class="result-box" style="display: none;"></div>
+
+        <h2 style="margin-top: 30px;">🏥 Trạng Thái Hệ Thống</h2>
+        <div class="health-status">
+          <div class="health-indicator" id="health-indicator"></div>
+          <span id="health-status">Đang tải...</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>💡 Dự án demo cho logging và monitoring | © 2025</p>
+    </div>
+  </div>
+
+  <script>
+    function getMode() {
+      return document.getElementById('mode').value;
+    }
+
+    function showResult(elementId, message, isSuccess = true) {
+      const element = document.getElementById(elementId);
+      element.innerText = message;
+      element.style.display = 'block';
+      element.className = 'result-box ' + (isSuccess ? 'success' : 'error');
+    }
+
+    // Login form
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const mode = getMode();
+      
+      try {
+        const res = await fetch(`/login?mode=${mode}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        showResult('login-result', data.message, res.ok);
+        if (res.ok) {
+          document.getElementById('login-form').reset();
+        }
+      } catch (err) {
+        showResult('login-result', '❌ Lỗi khi gọi API: ' + err.message, false);
+      }
+    });
+
+    // Get data button
+    document.getElementById('get-data').addEventListener('click', async () => {
+      const mode = getMode();
+      try {
+        const res = await fetch(`/api/data?mode=${mode}`);
+        const data = await res.json();
+        showResult('data-result', JSON.stringify(data, null, 2), res.ok);
+      } catch (err) {
+        showResult('data-result', '❌ Lỗi khi gọi API: ' + err.message, false);
+      }
+    });
+
+    // Health check
+    async function loadHealth() {
+      try {
+        const res = await fetch('/health');
+        const data = await res.json();
+        const indicator = document.getElementById('health-indicator');
+        const status = document.getElementById('health-status');
+        
+        if (res.ok) {
+          indicator.classList.add('online');
+          status.innerText = '✅ ' + (data.status || 'Hệ thống online');
+        } else {
+          status.innerText = '❌ ' + (data.status || 'Hệ thống offline');
+        }
+      } catch (err) {
+        document.getElementById('health-status').innerText = '⚠️ Không lấy được trạng thái';
+      }
+    }
+    
+    loadHealth();
+    setInterval(loadHealth, 10000);
+  </script>
+</body>
+</html>
