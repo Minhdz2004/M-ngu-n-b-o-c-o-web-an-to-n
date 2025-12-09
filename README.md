@@ -39,7 +39,7 @@ Structured → Log dạng JSON đầy đủ (IP, user, endpoint, latency, timest
 
 Chọn mode bạn muốn kiểm thử.
 
-⚠️ Chế độ này ảnh hưởng trực tiếp đến nội dung log được ghi vào:
+ Chế độ này ảnh hưởng trực tiếp đến nội dung log được ghi vào:
 
 Console (basic mode)
 
@@ -194,14 +194,6 @@ for i in {1..10}; do
   "http://localhost:3000/login?mode=structured"
 done
 
-
-Hiệu ứng:
-
-Prometheus → login_failed_total tăng nhanh
-
-Alertmanager → Gửi cảnh báo
-
-Kibana → Xuất hiện log hàng loạt request sai
 
 <img width="607" height="660" alt="Screenshot 2025-12-09 100940" src="https://github.com/user-attachments/assets/286e82b0-001a-4873-90b1-71f13c0c0c2f" />
 
